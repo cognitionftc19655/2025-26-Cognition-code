@@ -21,9 +21,9 @@ public class Teleop2026 extends LinearOpMode{
     DcMotor motorBackLeft;
     DcMotor motorFrontRight;
     DcMotor motorBackRight;
-    DcMotor arm = null;
-    CRServo intake = null;
-    Servo wrist = null;
+    // DcMotor arm = null;
+    // CRServo intake = null;
+    // Servo wrist = null;
 
 
     // Declare variables
@@ -74,12 +74,12 @@ public class Teleop2026 extends LinearOpMode{
         motorBackLeft = hardwareMap.dcMotor.get("lowerLeft"); //motorBackLeft
         motorFrontRight = hardwareMap.dcMotor.get("upperRight"); //motorFrontRight
         motorBackRight = hardwareMap.dcMotor.get("lowerRight"); //motorBackRight
-        arm = hardwareMap.dcMotor.get("arm");
+        // arm = hardwareMap.dcMotor.get("arm");
 
 
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        ((DcMotorEx) arm).setCurrentAlert(5,CurrentUnit.AMPS);
+       // ((DcMotorEx) arm).setCurrentAlert(5,CurrentUnit.AMPS);
         //Reverse motors if necessary
         //    motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -87,17 +87,20 @@ public class Teleop2026 extends LinearOpMode{
         motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
         //arm.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        /*
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+         */
+
         //Define and initialize servos
-        intake = hardwareMap.crservo.get("intake");
-        wrist = hardwareMap.servo.get("wrist");
+        // intake = hardwareMap.crservo.get("intake");
+        // wrist = hardwareMap.servo.get("wrist");
 
         /* Make sure that the intake is off, and the wrist is folded in. */
-        intake.setPower(INTAKE_OFF);
-        wrist.setPosition(WRIST_FOLDED_IN);
+        // intake.setPower(INTAKE_OFF);
+        // wrist.setPosition(WRIST_FOLDED_IN);
 
 
 
@@ -142,21 +145,21 @@ public class Teleop2026 extends LinearOpMode{
 
 
             if (gamepad2.a) {
-                intake.setPower(INTAKE_COLLECT);
+                // intake.setPower(INTAKE_COLLECT);
             }
             else if (gamepad2.x) {
-                intake.setPower(INTAKE_OFF);
+                // intake.setPower(INTAKE_OFF);
             }
             else if (gamepad2.b) {
-                intake.setPower(INTAKE_DEPOSIT);
+                // intake.setPower(INTAKE_DEPOSIT);
             }
 
 
             if(gamepad2.right_bumper){
                 /* This is the intaking/collecting arm position */
                 armPosition = ARM_COLLECT;
-                wrist.setPosition(WRIST_FOLDED_OUT);
-                intake.setPower(INTAKE_COLLECT);
+                // wrist.setPosition(WRIST_FOLDED_OUT);
+                // intake.setPower(INTAKE_COLLECT);
             }
 
             else if (gamepad2.left_bumper){
@@ -175,28 +178,28 @@ public class Teleop2026 extends LinearOpMode{
                     /* This turns off the intake, folds in the wrist, and moves the arm
                     back to folded inside the robot. This is also the starting configuration */
                 armPosition = ARM_COLLAPSED_INTO_ROBOT;
-                intake.setPower(INTAKE_OFF);
-                wrist.setPosition(WRIST_FOLDED_IN);
+                // intake.setPower(INTAKE_OFF);
+                // wrist.setPosition(WRIST_FOLDED_IN);
             }
 
             else if (gamepad2.dpad_right){
                 /* This is the correct height to score SPECIMEN on the HIGH CHAMBER */
                 armPosition = ARM_SCORE_SPECIMEN;
-                wrist.setPosition(WRIST_FOLDED_IN);
+                // wrist.setPosition(WRIST_FOLDED_IN);
             }
 
             else if (gamepad2.dpad_up){
                 /* This sets the arm to vertical to hook onto the LOW RUNG for hanging */
                 armPosition = ARM_ATTACH_HANGING_HOOK;
-                intake.setPower(INTAKE_OFF);
-                wrist.setPosition(WRIST_FOLDED_IN);
+                // intake.setPower(INTAKE_OFF);
+                // wrist.setPosition(WRIST_FOLDED_IN);
             }
 
             else if (gamepad2.dpad_down){
                 /* this moves the arm down to lift the robot up once it has been hooked */
                 armPosition = ARM_WINCH_ROBOT;
-                intake.setPower(INTAKE_OFF);
-                wrist.setPosition(WRIST_FOLDED_IN);
+                // intake.setPower(INTAKE_OFF);
+                // wrist.setPosition(WRIST_FOLDED_IN);
             }
 
 
@@ -214,17 +217,24 @@ public class Teleop2026 extends LinearOpMode{
             /* Here we set the target position of our arm to match the variable that was selected
             by the driver.
             We also set the target velocity (speed) the motor runs at, and use setMode to run it.*/
+            /*
             arm.setTargetPosition((int) (armPosition + armPositionFudgeFactor));
 
             ((DcMotorEx) arm).setVelocity(2100);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+             */
+
 
             /* send telemetry to the driver of the arm's current position and target position */
+
+            /*
             telemetry.addData("armTarget: ", arm.getTargetPosition());
             telemetry.addData("Sudheer", 546);
             telemetry.addData("arm Encoder: ", arm.getCurrentPosition());
             telemetry.update();
+
+             */
 
 
 
