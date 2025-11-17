@@ -81,8 +81,8 @@ public class Teleop2026 extends LinearOpMode{
 
        // ((DcMotorEx) arm).setCurrentAlert(5,CurrentUnit.AMPS);
         //Reverse motors if necessary
-        motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        //  motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        //  motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         //  motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         //  motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
         //arm.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -250,7 +250,7 @@ public class Teleop2026 extends LinearOpMode{
             motorFrontLeft.setPower(frontLeftPower * mainPower);
             motorBackLeft.setPower(backLeftPower * mainPower);
             motorFrontRight.setPower(frontRightPower * mainPower);
-            motorBackRight.setPower(backRightPower * mainPower*1.1);
+            motorBackRight.setPower(backRightPower * mainPower);
 
             telemetry.update();
 
