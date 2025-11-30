@@ -14,9 +14,11 @@ public class HardwarePushbot {
     public DcMotor  upperRight = null;
     public DcMotor  lowerLeft = null;
     public DcMotor  lowerRight = null;
-    public DcMotor arm = null;
-    public CRServo intake = null;
-    public Servo wrist = null;
+    public DcMotor intakeMotor = null;
+    public DcMotor turretLeft = null;
+    public DcMotor turretRight = null;
+    public CRServo aimingServo = null;
+    public Servo turretServo = null;
     //    /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
@@ -35,7 +37,7 @@ public class HardwarePushbot {
         upperRight = hwMap.dcMotor.get("upperRight"); //motorBackLeft
         lowerLeft = hwMap.dcMotor.get("lowerLeft"); //motorFrontRight
         lowerRight = hwMap.dcMotor.get("lowerRight"); //motorBackRight
-        arm = hwMap.dcMotor.get("arm");
+        intakeMotor = hwMap.dcMotor.get("arm");
 
 
         /* A number in degrees that the triggers can adjust the arm position by */
@@ -43,12 +45,12 @@ public class HardwarePushbot {
         // Variables that are used to set the arm to a specific position
 
 
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        ((DcMotorEx) arm).setCurrentAlert(5, CurrentUnit.AMPS);
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        ((DcMotorEx) intakeMotor).setCurrentAlert(5, CurrentUnit.AMPS);
 
-        arm.setTargetPosition(0);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setTargetPosition(0);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Set all motors to zero power'
@@ -60,12 +62,12 @@ public class HardwarePushbot {
         //  lowerRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Define and initialize servos
-        intake = hwMap.crservo.get("intake");
-        wrist = hwMap.servo.get("wrist");
+        aimingServo = hwMap.crservo.get("aimingServo");
+        turretServo = hwMap.servo.get("turretServo");
 
         /* Make sure that the intake is off, and the wrist is folded in. */
-        intake.setPower(INTAKE_OFF);
-        wrist.setPosition(WRIST_FOLDED_IN);
+        aimingServo.setPower(INTAKE_OFF);
+        turretServo.setPosition(WRIST_FOLDED_IN);
 
     }
 
@@ -166,35 +168,35 @@ public class HardwarePushbot {
         lowerRight.setPower(-speed);
     }
     public void intakeCollect(){
-        intake.setPower(INTAKE_COLLECT);
+        aimingServo.setPower(INTAKE_COLLECT);
     }
     public void intakeDeposit(){
-        intake.setPower(INTAKE_DEPOSIT);
+        aimingServo.setPower(INTAKE_DEPOSIT);
     }
     public void intakeOff(){
-        intake.setPower(INTAKE_OFF);
+        aimingServo.setPower(INTAKE_OFF);
     }
     public void scoreSampleLow(){
-        while(arm.getCurrentPosition()<1200){
-            arm.setTargetPosition((int)ARM_SCORE_SAMPLE_IN_LOW);
-            ((DcMotorEx) arm).setVelocity(2100);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while(intakeMotor.getCurrentPosition()<1200){
+            intakeMotor.setTargetPosition((int)ARM_SCORE_SAMPLE_IN_LOW);
+            ((DcMotorEx) intakeMotor).setVelocity(2100);
+            intakeMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
     }
     public void resetPosition(){
         armPosition = ARM_COLLAPSED_INTO_ROBOT;
-        intake.setPower(INTAKE_OFF);
-        wrist.setPosition(WRIST_FOLDED_IN);
+        aimingServo.setPower(INTAKE_OFF);
+        turretServo.setPosition(WRIST_FOLDED_IN);
     }
     public void intake(){
 
         armPosition = ARM_COLLECT;
-        wrist.setPosition(WRIST_FOLDED_OUT);
-        intake.setPower(INTAKE_COLLECT);
+        turretServo.setPosition(WRIST_FOLDED_OUT);
+        aimingServo.setPower(INTAKE_COLLECT);
     }
     public void scoreSpecimen(){
         armPosition = ARM_SCORE_SAMPLE_IN_LOW;
-        wrist.setPosition(WRIST_FOLDED_IN);
+        turretServo.setPosition(WRIST_FOLDED_IN);
     }
 
 }
