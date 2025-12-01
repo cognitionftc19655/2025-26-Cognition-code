@@ -27,44 +27,19 @@ public class Autonomous1 extends LinearOpMode{
         waitForStart();
 
         Thread thread = new Thread(() ->{
-            robot.intakeCollect();
-            sleep(500);
-            robot.scoreSpecimen();
-            robot.backward(0.3);
-            sleep(1000);
-            robot.turnLeft(0.3);
-            sleep(1000);
-            robot.forward(0.5);
-            sleep(1500);
-            robot.backward(0.4);
-            sleep(1200);
-            robot.zero();
-            robot.armPosition = 68 * robot.ARM_TICKS_PER_DEGREE;
-            robot.forward(0.3);
-            sleep(600);
-            robot.intakeDeposit();
-            sleep(1000);
-            robot.zero();
-            robot.strafeRight(0.4);
-            sleep(1500);
-            robot.backward(0.5);
-            sleep(1350);
-            robot.strafeLeft(0.3);
-            sleep(500);
-            robot.zero();
-            robot.resetPosition();
-
-
+            robot.conveyorBeltOn(1);
 
         });
         thread.start();
 
+        /*
         while (opModeIsActive()) {
             ((DcMotorEx) robot.arm).setVelocity(2100);
             robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.arm.setTargetPosition((int) (robot.armPosition));
 
-        }
+
+         */
 
 //        robot.intake();
 //        sleep(5000);
