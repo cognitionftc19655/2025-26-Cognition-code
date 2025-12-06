@@ -18,7 +18,7 @@ public class HardwarePushbot {
     public DcMotor turretLeft = null;
     public DcMotor turretRight = null;
     public DcMotor conveyorBelt = null;
-    public Servo aimingServo = null;
+    public CRServo aimingServo = null;
     public Servo turretServo = null;
     //    /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -38,8 +38,12 @@ public class HardwarePushbot {
         upperRight = hwMap.dcMotor.get("upperRight"); //motorBackLeft
         lowerLeft = hwMap.dcMotor.get("lowerLeft"); //motorFrontRight
         lowerRight = hwMap.dcMotor.get("lowerRight"); //motorBackRight
-        intakeMotor = hwMap.dcMotor.get("arm");
-
+        intakeMotor = hwMap.dcMotor.get("intakeMotor");
+        turretLeft = hwMap.dcMotor.get("turretLeft");
+        turretRight = hwMap.dcMotor.get("turretRight");
+        conveyorBelt = hwMap.dcMotor.get("conveyorBelt");
+        aimingServo = hwMap.crservo.get("aimingServo");
+        turretServo = hwMap.servo.get("turretServo");
 
         /* A number in degrees that the triggers can adjust the arm position by */
 
@@ -62,9 +66,6 @@ public class HardwarePushbot {
         lowerLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         //  lowerRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        //Define and initialize servos
-        aimingServo = hwMap.servo.get("aimingServo");
-        turretServo = hwMap.servo.get("turretServo");
 
         /* Make sure that the intake is off, and the wrist is folded in. */
         intakeMotor.setPower(INTAKE_OFF);
@@ -107,8 +108,10 @@ public class HardwarePushbot {
     /* Variables to store the positions that the wrist should be set to when folding in, or folding out. */
     final double WRIST_FOLDED_IN   = 0.8333;
 
-    final double TURRET_SERVO_START = 0.2;
-    final double TURRET_SERVO_UP = 0.5;
+    final double TURRET_SERVO_START = 0.5;
+    final double TURRET_SERVO_UP = 0.8;
+    final double TURRET_SERVO_STOP = 0.5;
+
     final double TURRET_SERVO_DOWN = 0.2;
 
     final double WRIST_FOLDED_OUT  = 0.5;
@@ -179,8 +182,8 @@ public class HardwarePushbot {
     }
 
 
-    public void intakeStart(double power){
-        intakeMotor.setPower(power);
+    public void intakeStart(){
+        intakeMotor.setPower(0.8);
 
 
     }
@@ -191,7 +194,7 @@ public class HardwarePushbot {
 
     public void outTakeOn(double power){
         turretRight.setPower(power);
-        turretLeft.setPower(-power);
+        turretLeft.setPower((-power));
     }
 
     public void outTakeOff(){
@@ -199,20 +202,33 @@ public class HardwarePushbot {
         turretLeft.setPower(0);
     }
 
-    public void conveyorBeltOn(double power){
-        conveyorBelt.setPower(power);
+    public void conveyorBeltOn(){
+        conveyorBelt.setPower(1);
     }
 
-    public void turretShoot(){
-        turretServo.setPosition(TURRET_SERVO_UP);
-        turretServo.setPosition(TURRET_SERVO_DOWN);
-        turretServo.setPosition(TURRET_SERVO_UP);
+    public void conveyorBeltOff(){
+        conveyorBelt.setPower(0);
+    }
 
+    public void turretServoBack(){
+        turretServo.setPosition(TURRET_SERVO_UP);
+    }
+
+    public void turretServoForward(){
+        turretServo.setPosition(TURRET_SERVO_DOWN);
+    }
+
+    public void turretServoStop(){
+        turretServo.setPosition(TURRET_SERVO_STOP);
     }
 
     // Autonomous code angle
-    public void turretAim(double position){
-        aimingServo.setPosition(position);
+    public void turretAim(double power){
+        aimingServo.setPower(power);
+    }
+
+    public void turretAimStop(){
+        aimingServo.setPower(0);
     }
 
 

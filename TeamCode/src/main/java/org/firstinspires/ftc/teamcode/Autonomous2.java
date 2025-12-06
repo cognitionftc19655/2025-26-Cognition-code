@@ -27,7 +27,7 @@ public class Autonomous2 extends LinearOpMode{
         waitForStart();
 
         Thread thread = new Thread(() ->{
-            final double conveyorBeltSpeed = 1.0;
+            robot.conveyorBeltOn();
 
         });
         thread.start();

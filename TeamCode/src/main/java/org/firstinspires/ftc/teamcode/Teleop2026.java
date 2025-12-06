@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 
 
-@TeleOp(name="Teleop2026", group ="Test")
+@TeleOp(name="Teleop2026 Cognition", group ="Test")
 public class Teleop2026 extends LinearOpMode{
     // Declare our motors
     // Make sure your ID's match your configuration
@@ -27,7 +28,7 @@ public class Teleop2026 extends LinearOpMode{
     DcMotor intakeMotor = null;
     DcMotor turretLeft = null;
     DcMotor turretRight = null;
-    Servo aimingServo = null;
+    CRServo aimingServo = null;
     DcMotor conveyorBelt = null;
     Servo turretServo = null;
 
@@ -59,8 +60,10 @@ public class Teleop2026 extends LinearOpMode{
     final double OUTTAKE_POWER    =  1;
 
 
-    final double TURRET_SERVO_START = 0.2;
-    final double TURRET_SERVO_UP = 0.5;
+    final double TURRET_SERVO_START = 0.5;
+    final double TURRET_SERVO_UP = 0.8;
+    final double TURRET_SERVO_STOP = 0.5;
+
     final double TURRET_SERVO_DOWN = 0.2;
     final double FUDGE_FACTOR = 15 * ARM_TICKS_PER_DEGREE;
 
@@ -68,6 +71,14 @@ public class Teleop2026 extends LinearOpMode{
     double armPositionFudgeFactor;
     double mainPower = 0.4; // maintain ratio, change this to change speed of robot
     boolean fastMode = true;
+    boolean intakeOn = false;
+    boolean aWasPressed = false;
+
+    boolean outtakeOn = false;
+    boolean outtakeWasPressed = false;
+
+    boolean conveyorBeltOn = false;
+    boolean conveyorBeltWasPressed = false;
 
     public void runOpMode() throws InterruptedException {
 
@@ -75,6 +86,13 @@ public class Teleop2026 extends LinearOpMode{
         motorBackLeft = hardwareMap.dcMotor.get("lowerLeft"); //motorBackLeft
         motorFrontRight = hardwareMap.dcMotor.get("upperRight"); //motorFrontRight
         motorBackRight = hardwareMap.dcMotor.get("lowerRight"); //motorBackRight
+        intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
+        turretLeft = hardwareMap.dcMotor.get("turretLeft");
+        turretRight = hardwareMap.dcMotor.get("turretRight");
+        aimingServo = hardwareMap.crservo.get("aimingServo");
+        conveyorBelt = hardwareMap.dcMotor.get("conveyorBelt");
+        turretServo = hardwareMap.servo.get("turretServo");
+
         // arm = hardwareMap.dcMotor.get("arm");
 
 
@@ -102,7 +120,7 @@ public class Teleop2026 extends LinearOpMode{
         /* Make sure that the intake is off, and the wrist is folded in. */
         // intake.setPower(INTAKE_OFF);
         turretServo.setPosition(TURRET_SERVO_START);
-        conveyorBelt.setPower(conveyorBeltSpeed);
+        conveyorBelt.setPower(0);
 
 
         telemetry.addData("TeleOp>", "Press Start");
@@ -145,31 +163,70 @@ public class Teleop2026 extends LinearOpMode{
 //
 //            }
 
-            while (gamepad1.right_bumper){
+            if (gamepad1.right_bumper) {
                 aimingServo.setPower(0.3);
-            }
-
-            while (gamepad1.left_bumper){
+            } else if (gamepad1.left_bumper) {
                 aimingServo.setPower(-0.3);
+            } else {
+                aimingServo.setPower(0);  // stop
             }
 
 
-                if (gamepad2.a) {
-                    intakeMotor.setPower(-1);
-                }
-                else if (gamepad2.y) {
-                    intakeMotor.setPower(0);
-                }
 
-                else if (gamepad2.x) {
+            if (gamepad1.b && !conveyorBeltWasPressed) {
+                if (!conveyorBeltOn) {
+                    conveyorBelt.setPower(conveyorBeltSpeed);
+                    conveyorBeltOn = true;
+                } else {
+                    conveyorBelt.setPower(0);
+                    conveyorBeltOn = false;
+                }
+            }
+
+            conveyorBeltWasPressed = gamepad1.b;
+
+
+
+
+
+
+            if (gamepad2.a && !aWasPressed) {
+                if (!intakeOn) {
+                    intakeMotor.setPower(0.8);
+                    intakeOn = true;
+                } else {
+                    intakeMotor.setPower(0);
+                    intakeOn = false;
+                }
+            }
+
+            aWasPressed = gamepad2.a;
+
+
+            if (gamepad2.b && !outtakeWasPressed) {
+                if (!outtakeOn) {
                     turretRight.setPower(OUTTAKE_POWER);
-                    turretLeft.setPower(OUTTAKE_POWER);
+                    turretLeft.setPower(-(OUTTAKE_POWER));
+                    outtakeOn = true;
+                } else {
+                    turretRight.setPower(0);
+                    turretLeft.setPower(0);
+                    outtakeOn = false;
+                }
+            }
+
+            outtakeWasPressed = gamepad2.b;
+
+           /*
+            if (gamepad2.x) {
+                    turretRight.setPower(OUTTAKE_POWER);
+                    turretLeft.setPower(-(OUTTAKE_POWER));
                 }
                 else if (gamepad2.b) {
                     turretRight.setPower(0);
                     turretLeft.setPower(0);
                 }
-
+*/
 
 
                 if (gamepad2.right_bumper){
@@ -180,17 +237,21 @@ public class Teleop2026 extends LinearOpMode{
                     turretServo.setPosition(TURRET_SERVO_DOWN);
                 }
 
-                else if (gamepad2.y){
+                 else {
+                    turretServo.setPosition(TURRET_SERVO_STOP);
+                }
+
+                if (gamepad2.y){
                     /* This is the correct height to score the sample in the LOW BASKET */
                 }
-                else if (gamepad2.dpad_left) {
+                if (gamepad2.dpad_left) {
                     /* This turns off the intake, folds in the wrist, and moves the arm
                     back to folded inside the robot. This is also the starting configuration */
                     // intake.setPower(INTAKE_OFF);
                     // wrist.setPosition(WRIST_FOLDED_IN);
                 }
 
-                else if (gamepad2.dpad_right){
+                if (gamepad2.dpad_right){
                     /* This is the correct height to score SPECIMEN on the HIGH CHAMBER */
                     // wrist.setPosition(WRIST_FOLDED_IN);
                 }
