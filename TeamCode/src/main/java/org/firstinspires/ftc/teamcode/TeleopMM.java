@@ -14,8 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 
 
-@TeleOp(name="Teleop2026 Cognition", group ="Test")
-public class Teleop2026 extends LinearOpMode{
+@TeleOp(name="Teleop2026 Test", group ="Test")
+public class TeleopMM extends LinearOpMode{
     // Declare our motors
     // Make sure your ID's match your configuration
     DcMotor motorFrontLeft;
@@ -30,7 +30,7 @@ public class Teleop2026 extends LinearOpMode{
     DcMotor turretRight = null;
     CRServo aimingServo = null;
     DcMotor conveyorBelt = null;
-    Servo turretServo = null;
+    CRServo turretServo = null;
 
     // Declare variables
     boolean secondHalf = false;                 // Use to hint the drivers for end game start
@@ -60,7 +60,7 @@ public class Teleop2026 extends LinearOpMode{
     final double OUTTAKE_POWER    =  1;
 
 
-    final double TURRET_SERVO_START = 0.5;
+    final double TURRET_SERVO_START = 0;
     final double TURRET_SERVO_UP = 0.8;
     final double TURRET_SERVO_STOP = 0.5;
 
@@ -76,8 +76,6 @@ public class Teleop2026 extends LinearOpMode{
 
     boolean outtakeOn = false;
     boolean outtakeWasPressed = false;
-    boolean reverseOuttakeOn = false;
-    boolean reverseOuttakeWasPressed = false;
 
     boolean conveyorBeltOn = false;
     boolean conveyorBeltWasPressed = false;
@@ -93,14 +91,14 @@ public class Teleop2026 extends LinearOpMode{
         turretRight = hardwareMap.dcMotor.get("turretRight");
         aimingServo = hardwareMap.crservo.get("aimingServo");
         conveyorBelt = hardwareMap.dcMotor.get("conveyorBelt");
-        turretServo = hardwareMap.servo.get("turretServo");
+        turretServo = hardwareMap.crservo.get("turretServo");
 
         // arm = hardwareMap.dcMotor.get("arm");
 
 
         // arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-       // ((DcMotorEx) arm).setCurrentAlert(5,CurrentUnit.AMPS);
+        // ((DcMotorEx) arm).setCurrentAlert(5,CurrentUnit.AMPS);
         //Reverse motors if necessary
         //  motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -121,7 +119,7 @@ public class Teleop2026 extends LinearOpMode{
 
         /* Make sure that the intake is off, and the wrist is folded in. */
         // intake.setPower(INTAKE_OFF);
-        turretServo.setPosition(TURRET_SERVO_START);
+        turretServo.setPower(TURRET_SERVO_START);
         conveyorBelt.setPower(0);
 
 
@@ -219,22 +217,6 @@ public class Teleop2026 extends LinearOpMode{
 
             outtakeWasPressed = gamepad2.b;
 
-
-
-            if (gamepad2.x && !reverseOuttakeWasPressed) {
-                if (!reverseOuttakeOn) {
-                    turretRight.setPower(-(OUTTAKE_POWER));
-                    turretLeft.setPower(OUTTAKE_POWER);
-                    reverseOuttakeOn = true;
-                } else {
-                    turretRight.setPower(0);
-                    turretLeft.setPower(0);
-                    reverseOuttakeOn = false;
-                }
-            }
-
-            reverseOuttakeWasPressed = gamepad2.x;
-
            /*
             if (gamepad2.x) {
                     turretRight.setPower(OUTTAKE_POWER);
@@ -247,44 +229,44 @@ public class Teleop2026 extends LinearOpMode{
 */
 
 
-                if (gamepad2.right_bumper){
-                    turretServo.setPosition(TURRET_SERVO_UP);
-                }
+            if (gamepad2.right_bumper){
+                turretServo.setPower(-1);
+            }
 
-                else if (gamepad2.left_bumper){
-                    turretServo.setPosition(TURRET_SERVO_DOWN);
-                }
+            else if (gamepad2.left_bumper){
+                turretServo.setPower(1);
+            }
 
-                 else {
-                    turretServo.setPosition(TURRET_SERVO_STOP);
-                }
+            else {
+                turretServo.setPower(0);
+            }
 
-                if (gamepad2.y){
-                    /* This is the correct height to score the sample in the LOW BASKET */
-                }
-                if (gamepad2.dpad_left) {
+            if (gamepad2.y){
+                /* This is the correct height to score the sample in the LOW BASKET */
+            }
+            if (gamepad2.dpad_left) {
                     /* This turns off the intake, folds in the wrist, and moves the arm
                     back to folded inside the robot. This is also the starting configuration */
-                    // intake.setPower(INTAKE_OFF);
-                    // wrist.setPosition(WRIST_FOLDED_IN);
-                }
+                // intake.setPower(INTAKE_OFF);
+                // wrist.setPosition(WRIST_FOLDED_IN);
+            }
 
-                if (gamepad2.dpad_right){
-                    /* This is the correct height to score SPECIMEN on the HIGH CHAMBER */
-                    // wrist.setPosition(WRIST_FOLDED_IN);
-                }
+            if (gamepad2.dpad_right){
+                /* This is the correct height to score SPECIMEN on the HIGH CHAMBER */
+                // wrist.setPosition(WRIST_FOLDED_IN);
+            }
 
-                else if (gamepad2.dpad_up){
-                    /* This sets the arm to vertical to hook onto the LOW RUNG for hanging */
-                    // intake.setPower(INTAKE_OFF);
-                    // wrist.setPosition(WRIST_FOLDED_IN);
-                }
+            else if (gamepad2.dpad_up){
+                /* This sets the arm to vertical to hook onto the LOW RUNG for hanging */
+                // intake.setPower(INTAKE_OFF);
+                // wrist.setPosition(WRIST_FOLDED_IN);
+            }
 
-                else if (gamepad2.dpad_down){
-                    /* this moves the arm down to lift the robot up once it has been hooked */
-                    // intake.setPower(INTAKE_OFF);
-                    // wrist.setPosition(WRIST_FOLDED_IN);
-                }
+            else if (gamepad2.dpad_down){
+                /* this moves the arm down to lift the robot up once it has been hooked */
+                // intake.setPower(INTAKE_OFF);
+                // wrist.setPosition(WRIST_FOLDED_IN);
+            }
 
 
              /* Here we create a "fudge factor" for the arm position.
@@ -295,7 +277,7 @@ public class Teleop2026 extends LinearOpMode{
             than the other, it "wins out". This variable is then multiplied by our FUDGE_FACTOR.
             The FUDGE_FACTOR is the number of degrees that we can adjust the arm by with this function. */
 
-                //armPositionFudgeFactor = FUDGE_FACTOR * (gamepad2.right_trigger + (-gamepad2.left_trigger));
+            //armPositionFudgeFactor = FUDGE_FACTOR * (gamepad2.right_trigger + (-gamepad2.left_trigger));
 
 
             /* Here we set the target position of our arm to match the variable that was selected
@@ -310,7 +292,7 @@ public class Teleop2026 extends LinearOpMode{
              */
 
 
-                /* send telemetry to the driver of the arm's current position and target position */
+            /* send telemetry to the driver of the arm's current position and target position */
 
             /*
             telemetry.addData("armTarget: ", arm.getTargetPosition());
@@ -322,30 +304,30 @@ public class Teleop2026 extends LinearOpMode{
 
 
 
-                // Denominator is the largest motor power (absolute value) or 1
-                // This ensures all the powers maintain the same ratio, but only when
-                // at least one is out of the range [-1, 1]
-                double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-                double frontLeftPower = (y - x - rx) / denominator;
-                double backLeftPower = (y + x - rx) / denominator;
-                double frontRightPower = (y + x + rx) / denominator;
-                double backRightPower = (y - x + rx) / denominator;
-                //Slower speed so that is easier to control
-                motorFrontLeft.setPower(frontLeftPower * mainPower);
-                motorBackLeft.setPower(backLeftPower * mainPower);
-                motorFrontRight.setPower(frontRightPower * mainPower);
-                motorBackRight.setPower(backRightPower * mainPower);
+            // Denominator is the largest motor power (absolute value) or 1
+            // This ensures all the powers maintain the same ratio, but only when
+            // at least one is out of the range [-1, 1]
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double frontLeftPower = (y - x - rx) / denominator;
+            double backLeftPower = (y + x - rx) / denominator;
+            double frontRightPower = (y + x + rx) / denominator;
+            double backRightPower = (y - x + rx) / denominator;
+            //Slower speed so that is easier to control
+            motorFrontLeft.setPower(frontLeftPower * mainPower);
+            motorBackLeft.setPower(backLeftPower * mainPower);
+            motorFrontRight.setPower(frontRightPower * mainPower);
+            motorBackRight.setPower(backRightPower * mainPower);
 
-                telemetry.update();
-
-
-
-                telemetry.addData("Game>", "Over");
-
-                telemetry.update();
+            telemetry.update();
 
 
-            }
+
+            telemetry.addData("Game>", "Over");
+
+            telemetry.update();
+
+
+        }
 
 
     }
