@@ -183,7 +183,7 @@ public class HardwarePushbot {
 
 
     public void intakeStart(){
-        intakeMotor.setPower(0.8);
+        intakeMotor.setPower(0.9);
 
 
     }
@@ -203,7 +203,7 @@ public class HardwarePushbot {
     }
 
     public void conveyorBeltOn(){
-        conveyorBelt.setPower(1);
+        conveyorBelt.setPower(-1);
     }
 
     public void conveyorBeltOff(){

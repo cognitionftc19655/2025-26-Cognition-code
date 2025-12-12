@@ -103,9 +103,11 @@ public class Teleop2026 extends LinearOpMode{
        // ((DcMotorEx) arm).setCurrentAlert(5,CurrentUnit.AMPS);
         //Reverse motors if necessary
         //  motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorFrontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         //  motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        //  motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBackLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
         //arm.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /*
@@ -138,9 +140,12 @@ public class Teleop2026 extends LinearOpMode{
 
         while (opModeIsActive()) {
 
-            double y = gamepad1.left_stick_y; // Remember, this is reversed!
-            double x = gamepad1.left_stick_x*1.25; // Counteract imperfect strafing
-            double rx = gamepad1.right_stick_x*1.15;
+            double y = -gamepad1.left_stick_y; // Remember, this is reversed!
+            double rx = -gamepad1.left_stick_x*1.25; // Counteract imperfect strafing
+
+            //switched names rx and x
+
+            double x = gamepad1.right_stick_x*1.15;
 
             if ((runtime.seconds() > HALF_TIME) && !secondHalf) {
                 secondHalf = true;
@@ -166,13 +171,12 @@ public class Teleop2026 extends LinearOpMode{
 //            }
 
             if (gamepad1.right_bumper) {
-                aimingServo.setPower(0.3);
+                aimingServo.setPower(0.6);
             } else if (gamepad1.left_bumper) {
-                aimingServo.setPower(-0.3);
+                aimingServo.setPower(-0.6);
             } else {
                 aimingServo.setPower(0);  // stop
             }
-
 
 
             if (gamepad1.b && !conveyorBeltWasPressed) {
@@ -207,8 +211,10 @@ public class Teleop2026 extends LinearOpMode{
 
             if (gamepad2.b && !outtakeWasPressed) {
                 if (!outtakeOn) {
-                    turretRight.setPower(OUTTAKE_POWER);
-                    turretLeft.setPower(-(OUTTAKE_POWER));
+                    ((DcMotorEx)turretRight).setVelocity(5000);
+                    ((DcMotorEx)turretLeft).setVelocity(-5000);
+                    // turretRight.setPower(OUTTAKE_POWER);
+                    // turretLeft.setPower(-(OUTTAKE_POWER));
                     outtakeOn = true;
                 } else {
                     turretRight.setPower(0);
@@ -223,8 +229,10 @@ public class Teleop2026 extends LinearOpMode{
 
             if (gamepad2.x && !reverseOuttakeWasPressed) {
                 if (!reverseOuttakeOn) {
-                    turretRight.setPower(-(OUTTAKE_POWER));
-                    turretLeft.setPower(OUTTAKE_POWER);
+                    ((DcMotorEx)turretRight).setVelocity(-5000);
+                    ((DcMotorEx)turretLeft).setVelocity(5000);
+                    //   turretRight.setPower(-(OUTTAKE_POWER));
+                    //  turretLeft.setPower(OUTTAKE_POWER);
                     reverseOuttakeOn = true;
                 } else {
                     turretRight.setPower(0);
@@ -250,7 +258,7 @@ public class Teleop2026 extends LinearOpMode{
                 if (gamepad2.right_bumper){
                     turretServo.setPosition(TURRET_SERVO_UP);
                 }
-
+//down then up
                 else if (gamepad2.left_bumper){
                     turretServo.setPosition(TURRET_SERVO_DOWN);
                 }
