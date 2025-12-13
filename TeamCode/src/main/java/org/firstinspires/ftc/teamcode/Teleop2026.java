@@ -57,7 +57,7 @@ public class Teleop2026 extends LinearOpMode{
 
     final double INTAKE_COLLECT    = -1.0;
     final double INTAKE_OFF        =  0.0;
-    final double OUTTAKE_POWER    =  1;
+    final double OUTTAKE_POWER    =  0.6;
 
 
     final double TURRET_SERVO_START = 0.5;
@@ -69,7 +69,7 @@ public class Teleop2026 extends LinearOpMode{
 
     // Variables that are used to set the arm to a specific position
     double armPositionFudgeFactor;
-    double mainPower = 0.4; // maintain ratio, change this to change speed of robot
+    double mainPower = 0.8; // maintain ratio, change this to change speed of robot
     boolean fastMode = true;
     boolean intakeOn = false;
     boolean aWasPressed = false;
@@ -209,12 +209,13 @@ public class Teleop2026 extends LinearOpMode{
             aWasPressed = gamepad2.a;
 
 
+            // Toggle outtake
             if (gamepad2.b && !outtakeWasPressed) {
                 if (!outtakeOn) {
-                    ((DcMotorEx)turretRight).setVelocity(5000);
-                    ((DcMotorEx)turretLeft).setVelocity(-5000);
-                    // turretRight.setPower(OUTTAKE_POWER);
-                    // turretLeft.setPower(-(OUTTAKE_POWER));
+  //                  ((DcMotorEx)turretRight).setVelocity(57);
+    //                ((DcMotorEx)turretLeft).setVelocity(-60);
+                    turretRight.setPower(OUTTAKE_POWER);
+                    turretLeft.setPower(-(OUTTAKE_POWER));
                     outtakeOn = true;
                 } else {
                     turretRight.setPower(0);
@@ -229,10 +230,10 @@ public class Teleop2026 extends LinearOpMode{
 
             if (gamepad2.x && !reverseOuttakeWasPressed) {
                 if (!reverseOuttakeOn) {
-                    ((DcMotorEx)turretRight).setVelocity(-5000);
-                    ((DcMotorEx)turretLeft).setVelocity(5000);
-                    //   turretRight.setPower(-(OUTTAKE_POWER));
-                    //  turretLeft.setPower(OUTTAKE_POWER);
+    //                ((DcMotorEx)turretRight).setVelocity(-60);
+    //                ((DcMotorEx)turretLeft).setVelocity(60);
+                    turretRight.setPower(-(OUTTAKE_POWER));
+                    turretLeft.setPower(OUTTAKE_POWER);
                     reverseOuttakeOn = true;
                 } else {
                     turretRight.setPower(0);

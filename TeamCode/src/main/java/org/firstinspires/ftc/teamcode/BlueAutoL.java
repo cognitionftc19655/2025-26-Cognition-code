@@ -27,21 +27,26 @@ public class BlueAutoL extends LinearOpMode{
         waitForStart();
 
         Thread thread = new Thread(() ->{
+
             robot.conveyorBeltOn();
             robot.forward(0.4);
             sleep(1000);
             robot.zero();
-            robot.turretAim(1.0);
+            robot.turretAim(0.2);
             sleep(4000);
             robot.turretAimStop();
 
-            robot.outTakeOn(1.0);
+            sleep(1000);
+
+            robot.outTakeOn(0.5);
             robot.turretServoForward();
             sleep(500);
             robot.turretServoBack();
             robot.outTakeOff();
             sleep(500);
             robot.turretServoStop();
+
+            sleep(1000);
 
             robot.backward(1.0);
             sleep(500);
@@ -52,6 +57,9 @@ public class BlueAutoL extends LinearOpMode{
             robot.backward(1.0);
             sleep(800); //change
             robot.zero();
+
+            sleep(1000);
+
             robot.turnRight(0.5);
             sleep(500);
             robot.zero();
@@ -62,6 +70,8 @@ public class BlueAutoL extends LinearOpMode{
             sleep(500);
             robot.intakeStop();
 
+            sleep(1000);
+
             robot.forward(1.0);
             sleep(1000);
             robot.zero();
@@ -71,13 +81,16 @@ public class BlueAutoL extends LinearOpMode{
             robot.forward(1.0);
             sleep(800); // change
             robot.zero();
+
+            sleep(1000);
+
             robot.turnLeft(0.5);
             sleep(750);
             robot.zero();
             robot.backward(1.0);
             sleep(500);
             robot.zero();
-            robot.outTakeOn(1.0);
+            robot.outTakeOn(0.5);
             robot.turretServoForward();
             sleep(500);
             robot.turretServoBack();
@@ -85,12 +98,17 @@ public class BlueAutoL extends LinearOpMode{
             sleep(500);
             robot.turretServoStop();
 
+            sleep(1000);
+
             robot.backward(1.0);
             sleep(500);
             robot.zero();
             robot.turnRight(0.5);
             sleep(750);
             robot.zero();
+
+            sleep(1000);
+
             robot.backward(1.0);
             sleep(2000); //change
             robot.zero();
@@ -104,6 +122,8 @@ public class BlueAutoL extends LinearOpMode{
             sleep(500);
             robot.intakeStop();
 
+            sleep(1000);
+
             robot.forward(1.0);
             sleep(1000);
             robot.zero();
@@ -116,10 +136,13 @@ public class BlueAutoL extends LinearOpMode{
             robot.turnLeft(0.5);
             sleep(750);
             robot.zero();
+
+            sleep(1000);
+
             robot.backward(1.0);
             sleep(500);
             robot.zero();
-            robot.outTakeOn(1.0);
+            robot.outTakeOn(0.5);
             robot.turretServoForward();
             sleep(500);
             robot.turretServoBack();
